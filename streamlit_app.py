@@ -24,7 +24,7 @@ fruit_df = (
 
 pd_df = fruit_df.to_pandas()
 
-# Multiselect
+# Multiselect (must be a list, not a dataframe)
 ingredients_list = st.multiselect(
     "Choose up to 5 ingredients:",
     pd_df["FRUIT_NAME"].tolist(),
@@ -37,12 +37,10 @@ if ingredients_list:
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + " "
 
-        # SEARCH_ON is lowercase fruit name
+        # SEARCH_ON value = lowercase fruit name
         search_on = fruit_chosen.lower()
 
-        st.write(
-            f"The search value for {fruit_chosen} is {search_on}."
-        )
+        st.write(f"The search value for {fruit_chosen} is {search_on}.")
 
         st.subheader(f"{fruit_chosen} Nutrition Information")
 
@@ -52,7 +50,7 @@ if ingredients_list:
 
         st.dataframe(
             response.json(),
-            width="100%"
+            width="stretch"   # ✅ CORRECT replacement
         )
 
     # Insert order
