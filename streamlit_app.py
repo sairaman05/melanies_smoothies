@@ -15,7 +15,7 @@ session = cnx.session()
 name_on_order = st.text_input("Name on Smoothie:")
 st.write("The name on your smoothie will be:", name_on_order)
 
-# Get fruit list (ONLY columns that exist)
+# Get fruit list
 fruit_df = (
     session
     .table("SMOOTHIES.PUBLIC.FRUIT_OPTIONS")
@@ -24,7 +24,7 @@ fruit_df = (
 
 pd_df = fruit_df.to_pandas()
 
-# Multiselect MUST use a list, not a dataframe
+# Multiselect
 ingredients_list = st.multiselect(
     "Choose up to 5 ingredients:",
     pd_df["FRUIT_NAME"].tolist(),
@@ -37,7 +37,7 @@ if ingredients_list:
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + " "
 
-        # SEARCH_ON is simply lowercase fruit name
+        # SEARCH_ON is lowercase fruit name
         search_on = fruit_chosen.lower()
 
         st.write(
@@ -58,15 +58,9 @@ if ingredients_list:
         VALUES ('{ingredients_string.strip()}', '{name_on_order}')
     """
 
-    time_to_insert = st.button("Submit Order")
-
-    if time_to_insert:
+    if st.button("Submit Order"):
         session.sql(insert_stmt).collect()
         st.success(
             f"Your Smoothie is ordered, {name_on_order}!",
             icon="✅"
         )
-
-
-smoothiefroot_response = requests.get(f"https://my.smoothiefroot.com/api/fruit/{search_on}")
-sf_df = st.dataframe(data = smoothiefroot_response.json(), use_container_width = True)
