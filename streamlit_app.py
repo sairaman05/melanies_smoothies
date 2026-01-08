@@ -50,7 +50,10 @@ if ingredients_list:
             f"https://my.smoothiefroot.com/api/fruit/{search_on}"
         )
 
-        st.dataframe(response.json(), use_container_width=True)
+        st.dataframe(
+            response.json(),
+            width="100%"
+        )
 
     # Insert order
     insert_stmt = f"""
